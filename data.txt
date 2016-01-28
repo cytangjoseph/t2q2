@@ -1,0 +1,2 @@
+﻿peter@example.com|peterpass|Peter Lee|12, Good Road|2001
+mary@example.com|marypass|Mary Au|33, Fine Avenue|2003
