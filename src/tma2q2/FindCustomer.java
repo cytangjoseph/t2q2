@@ -41,7 +41,7 @@ public class FindCustomer  {
                 // string list converted to array
                 
                 
-                 Object[] itemArray = itemList.toArray();
+                Object[] itemArray = itemList.toArray();
                 //insert data into database table
                 manager.getTransaction().begin();
                 Customer c1 = new Customer();
@@ -49,12 +49,12 @@ public class FindCustomer  {
                 //add email
                 String email = (String)itemArray[0];
                 c1.setEmail(email);
-               //System.out.println("email: " + c1.getEmail());
+                //System.out.println("email: " + c1.getEmail());
                 
                 //add pass
                 String pass = (String)itemArray[1];
                 c1.setPass(pass);
-                //ystem.out.println("password: " + c1.getPass());
+                //System.out.println("password: " + c1.getPass());
                 
                 //add name
                 String name = (String)itemArray[2];
@@ -82,14 +82,10 @@ public class FindCustomer  {
         //display the records
         Query q2 = manager.createNamedQuery("Customer.findAll");
         List<Customer> customers = q2.getResultList();
-        for (Customer c: customers){
+        for (Customer c : customers) {
             System.out.println(c.getName() + ", " + c.getEmail());
         }
-                
-               
-              
-             
-        
+            
         manager.close();
         factory.close();
     }
