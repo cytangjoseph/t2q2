@@ -1,6 +1,7 @@
 package tma2q2;
 //entity to find 
 import java.io.*;
+import java.util.*;
 //import java.io.Serializable;
 //import javax.persistence.Temporal;//2
 //import javax.persistence.Table;
@@ -14,115 +15,11 @@ import javax.persistence.Query;
 
 public class FindCustomer  {
 
-    //private static final long serialVersionUID = 1L;
-    //@Id
-    //@Basic(optional = false)
-    //@Column(name = "ID")
-    //private Integer id;
-    //@Column(name = "EMAIL")
-    //private String email;
-    //@Column(name = "PASS")
-    //private String pass;
-    //@Column(name = "NAME")
-    //private String name;
-    //@Column(name = "ADDRESS")
-    //private String address;
-    //@Column(name = "YOB")
-    //private String yob;
 
-    //public Customer() {
-    //}
-
-    //public Customer(Integer id) {
-    //    this.id = id;
-    //}
-
-    //public Integer getId() {
-    //    return id;
-    //}
-
-    //public void setId(Integer id) {
-    //    this.id = id;
-    //}
-
-    //public String getEmail() {
-    //    return email;
-    //}
-
-    //public void setEmail(String email) {
-    //    this.email = email;
-    //}
-
-    //public String getPass() {
-    //    return pass;
-    //}
-
-    //public void setPass(String pass) {
-    //    this.pass = pass;
-    //}
-
-    //public String getName() {
-    //    return name;
-    //}
-
-    //public void setName(String name) {
-    //    this.name = name;
-    //}
-
-    //public String getAddress() {
-    //    return address;
-    //}
-
-    //public void setAddress(String address) {
-    //    this.address = address;
-    //}
-
-    //public String getYob() {
-    //    return yob;
-    //}
-
-    //public void setYob(String yob) {
-    //    this.yob = yob;
-    //}
-
-    //@Override
-    //public int hashCode() {
-    //    int hash = 0;
-    //    hash += (id != null ? id.hashCode() : 0);
-    //    return hash;
-    //}
-
-    //@Override
-    //public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
-    //    if (!(object instanceof Customer)) {
-    //        return false;
-    //    }
-    //    Customer other = (Customer) object;
-    //    if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
-    //        return false;
-    //    }
-    //    return true;
-    //}
-
-    //@Override
-    //public String toString() {
-    //    return "tma2q2.Customer[ id=" + id + " ]";
-    //}
-    
+      
     public static void main(String[] args)throws Exception {
         System.out.println("hello from Customer.java");
-        //Customer cust1 = new Customer();
-        //cust1.setId(1);
-        //cust1.setEmail("peter@example.com");
-        //cust1.setPass("peterpass");
-        //cust1.setName("Peter Lee");
-        //cust1.setAddress("2, Good Road");
-        //cust1.setYob("2001");
         
-        //System.out.println("email: " + cust1.getEmail());
-        //System.out.println("name: " + cust1.getName());
-        //@Query(query = "SELECT c FROM customer c");
 
         EntityManagerFactory factory = Persistence.createEntityManagerFactory("customerPU");
         EntityManager manager = factory.createEntityManager();
@@ -130,31 +27,69 @@ public class FindCustomer  {
         Long count = (Long) q1.getSingleResult();
         if(count==0){
             //record is empty, read from data.txst
-            System.out.println("record empty, read from data.txt");
+            System.out.println("record empty, read from data.txt...");
             //try {
             FileReader fr = new FileReader("data.txt");
             BufferedReader br = new BufferedReader(fr);
             String s;
             while((s = br.readLine()) != null) {
-                System.out.println(s);
+                
+                //System.out.println(s);
+                //split the string s
+                String[] items = s.split("\\|");
+                // store in string list
+                List<String> itemList= new ArrayList<String>(Arrays.asList(items));
+                // string list converted to array
+                
+                
+                 Object[] itemArray = itemList.toArray();
+                //insert data into database table
+                manager.getTransaction().begin();
+                Customer c1 = new Customer();
+                
+                //add email
+                String email = (String)itemArray[0];
+                c1.setEmail(email);
+               //System.out.println("email: " + c1.getEmail());
+                
+                //add pass
+                String pass = (String)itemArray[1];
+                c1.setPass(pass);
+                //ystem.out.println("password: " + c1.getPass());
+                
+                //add name
+                String name = (String)itemArray[2];
+                c1.setName(name);
+                //System.out.println("name: " + c1.getName());
+                
+                //add address
+                String address = (String)itemArray[3];
+                c1.setAddress(address);
+                //System.out.println("address: " + c1.getAddress());
+                
+                //add yob
+                String yob = (String)itemArray[4];
+                c1.setYob(yob);
+                //System.out.println("yob: " + c1.getYob());
+                
+                // change to managed state
+                manager.persist(c1);
+                manager.getTransaction().commit();
             }
             fr.close();
-            //insert data into database table
-            //display the records
 
         }    
-        else
-            //display the records
-            System.out.println("Number of customers: " + count);
-        // transaction
-        manager.getTransaction().begin();
-        //Customer c1 = new Customer();
-        //c1.setName("Julia");
-        //c1.setEmail("julia@example.com");
-        //c1.setPass("juliapass");
-        //manager.persist(c1);
-        //System.out.println("created customer ID: " + c1.getId());
-        manager.getTransaction().commit();
+        
+        //display the records
+        Query q2 = manager.createNamedQuery("Customer.findAll");
+        List<Customer> customers = q2.getResultList();
+        for (Customer c: customers){
+            System.out.println(c.getName() + ", " + c.getEmail());
+        }
+                
+               
+              
+             
         
         manager.close();
         factory.close();
