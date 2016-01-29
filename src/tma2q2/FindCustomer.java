@@ -2,7 +2,6 @@ package tma2q2;
 //entity to find 
 import java.io.*;
 import java.util.*;
-//import java.io.Serializable;
 //import javax.persistence.Temporal;//2
 //import javax.persistence.Table;
 //import javax.xml.bind.annotation.XmlRootElement;
