@@ -35,44 +35,34 @@ public class FindCustomer  {
                 
                 //System.out.println(s);
                 //split the string s
-                String[] items = s.split("\\|");
+                Object [] items = s.split("\\|");
                 // store in string list
-                List<String> itemList= new ArrayList<String>(Arrays.asList(items));
+                //List<String> itemList= new ArrayList<String>(Arrays.asList(items));
                 // string list converted to array
                 
                 
-                 Object[] itemArray = itemList.toArray();
+                //Object[] itemArray = itemList.toArray();
                 //insert data into database table
                 manager.getTransaction().begin();
-                Customer c1 = new Customer();
+                Customer c = new Customer();
                 
                 //add email
-                String email = (String)itemArray[0];
-                c1.setEmail(email);
-               //System.out.println("email: " + c1.getEmail());
-                
+                c.setEmail((String)items[0]);
+                 
                 //add pass
-                String pass = (String)itemArray[1];
-                c1.setPass(pass);
-                //ystem.out.println("password: " + c1.getPass());
+                c.setPass((String)items[1]);
                 
                 //add name
-                String name = (String)itemArray[2];
-                c1.setName(name);
-                //System.out.println("name: " + c1.getName());
+                c.setName((String)items[2]);
                 
                 //add address
-                String address = (String)itemArray[3];
-                c1.setAddress(address);
-                //System.out.println("address: " + c1.getAddress());
-                
+                c.setAddress((String)items[3]);
+                 
                 //add yob
-                String yob = (String)itemArray[4];
-                c1.setYob(yob);
-                //System.out.println("yob: " + c1.getYob());
-                
+                c.setYob((String)items[4]);
+                 
                 // change to managed state
-                manager.persist(c1);
+                manager.persist(c);
                 manager.getTransaction().commit();
             }
             fr.close();
@@ -82,14 +72,10 @@ public class FindCustomer  {
         //display the records
         Query q2 = manager.createNamedQuery("Customer.findAll");
         List<Customer> customers = q2.getResultList();
-        for (Customer c: customers){
+        for (Customer c : customers) {
             System.out.println(c.getName() + ", " + c.getEmail());
         }
-                
-               
-              
-             
-        
+            
         manager.close();
         factory.close();
     }
